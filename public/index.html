@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Incident Report Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message, .error-message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Citizen Incident Report</h1>
+            <p>Report non-emergency incidents to your local police department</p>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+        <div id="errorMessage" class="error-message"></div>
+
+        <form id="reportForm">
+            <div class="form-group">
+                <label for="agency">Select Your Agency <span class="required">*</span></label>
+                <select id="agency" name="agency" required>
+                    <option value="">-- Select Agency --</option>
+                    <option value="fullwooddemo">Fullwood Demo Police Department</option>
+                    <option value="agency2">Agency 2 (Coming Soon)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="citizenName">Your Name <span class="required">*</span></label>
+                <input type="text" id="citizenName" name="citizenName" required placeholder="John Doe">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="citizenEmail">Email <span class="required">*</span></label>
+                    <input type="email" id="citizenEmail" name="citizenEmail" required placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="citizenPhone">Phone Number</label>
+                    <input type="tel" id="citizenPhone" name="citizenPhone" placeholder="(555) 123-4567">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="incidentLocation">Incident Location <span class="required">*</span></label>
+                <input type="text" id="incidentLocation" name="incidentLocation" required placeholder="123 Main St, City, State">
+            </div>
+
+            <div class="form-group">
+                <label for="incidentType">Incident Type <span class="required">*</span></label>
+                <select id="incidentType" name="incidentType" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="theft">Theft</option>
+                    <option value="vandalism">Vandalism</option>
+                    <option value="noise_complaint">Noise Complaint</option>
+                    <option value="suspicious_activity">Suspicious Activity</option>
+                    <option value="traffic">Traffic Issue</option>
+                    <option value="lost_property">Lost Property</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="incidentDate">Incident Date <span class="required">*</span></label>
+                    <input type="date" id="incidentDate" name="incidentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="incidentTime">Incident Time <span class="required">*</span></label>
+                    <input type="time" id="incidentTime" name="incidentTime" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description <span class="required">*</span></label>
+                <textarea id="description" name="description" required placeholder="Please provide details about the incident..."></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Submit Report</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('reportForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Set max date to today
+        document.getElementById('incidentDate').max = new Date().toISOString().split('T')[0];
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                const response = await fetch('/submit-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMessage.textContent = `${result.message} Report ID: ${result.reportId}`;
+                    successMessage.style.display = 'block';
+                    form.reset();
+
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message || 'An error occurred. Please try again.';
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Report';
+            }
+        });
+    </script>
+</body>
+</html>
