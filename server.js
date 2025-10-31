@@ -34,15 +34,24 @@ app.post('/submit-report', async (req, res) => {
 
     console.log('Received report:', reportData);
 
-    // TODO: This will send to Prismatic webhook once configured
-    const prismaticWebhookUrl = process.env.PRISMATIC_WEBHOOK_URL;
+    // Agency-to-webhook mapping for multi-tenant routing
+    const agencyWebhooks = {
+      'fullwooddemo': process.env.FULLWOOD_WEBHOOK_URL,
+      'kelloggpolice': process.env.KELLOGG_WEBHOOK_URL,
+      // Add more agencies here as needed
+    };
+
+    // Normalize agency name for lookup
+    const agencyKey = reportData.agency?.toLowerCase().replace(/\s+/g, '');
+    const prismaticWebhookUrl = agencyWebhooks[agencyKey];
 
     if (prismaticWebhookUrl) {
-      console.log('Sending to Prismatic webhook...');
+      console.log(`Routing to ${reportData.agency} (${agencyKey}) webhook...`);
       const response = await axios.post(prismaticWebhookUrl, reportData);
       console.log('Prismatic response:', response.status);
     } else {
-      console.log('PRISMATIC_WEBHOOK_URL not configured - skipping webhook call');
+      console.log(`No webhook configured for agency: ${reportData.agency} (${agencyKey})`);
+      console.log('Available agencies:', Object.keys(agencyWebhooks));
     }
 
     res.json({
